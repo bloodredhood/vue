@@ -1,17 +1,16 @@
 <template>
   <form @submit.prevent>
     <h4>Post creation</h4>
-    <input v-model="post.title" class="input" type="text" placeholder="Name" />
-    <input v-model="post.body" class="input" type="text"
+
+    <my-input v-model="post.title" type="text" placeholder="Name" />
+    <my-input v-model="post.body" type="text"
       placeholder="Description" />
     <my-button style="align-self: flex-end; margin-top: 15px;" @click="createPost">create post</my-button>
   </form>
 </template>
 
 <script>
-import MyButton from "@/components/UI/MyButton"
 export default {
-  components: {MyButton},
   data() {
     return {
       post: {
@@ -39,12 +38,4 @@ form {
   display: flex;
   flex-direction: column;
 }
-
-.input {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px 15px;
-  margin-top: 15px;
-}
-
 </style>

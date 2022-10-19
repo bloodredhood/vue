@@ -4,13 +4,12 @@
       <div><strong>Name: </strong>{{post.title}}</div>
       <div><strong>Description: </strong>{{post.body}}</div>
     </div>
-    <my-button>Delete post</my-button>
+    <my-button @click="$emit('remove', post)" >Delete post
+    </my-button>
   </div>
 </template>
 
 <script>
-import MyButton from '@/components/UI/MyButton';
-
 export default {
   props: {
     post: {
@@ -18,7 +17,6 @@ export default {
       required: true,
     }
   },
-  components: { MyButton }
 }
 </script>
 
