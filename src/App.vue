@@ -1,12 +1,18 @@
 <template>
   <div class="app">
     <h1>Posts Page</h1>
-    <my-button @click="fetchPosts">get posts</my-button>
-    <my-button style="margin: 20px 0;" @click="showDialog">Add new post</my-button>
+    <div class="app_btn">
+      <my-button @click="showDialog">Add new post</my-button>
+      <my-select v-model="selectedSort"
+      :options="sortOptions"
+      ></my-select>
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost"/>
     </my-dialog>
-    <post-list :posts="posts" @remove="removePost"/>
+    <post-list :posts="posts" @remove="removePost"
+    v-if="!isPostLoading"/>
+    <div v-else>loading...</div>
   </div>
 </template>
 
@@ -15,16 +21,19 @@ import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
 import axios from "axios"
 import MyButton from "./components/UI/MyButton.vue";
+import MySelect from "./components/UI/MySelect.vue";
 export default {
   data() {
     return {
-      posts: [
-        { id: 1, title: "JS", body: "descr of JS" },
-        { id: 2, title: "python", body: "descr of python" },
-        { id: 3, title: "C", body: "descr of C" },
-      ],
+      posts: [],
       dialogVisible: false,
-      modifictorValue: "",
+      isPostLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        {value: "title", name: "by name"},
+        {value: "body", name: "by innertext"},
+        {value: "id", name: "by id"},
+      ]
     };
   },
   methods: {
@@ -40,14 +49,20 @@ export default {
     },
     async fetchPosts() {
       try {
+        this.isPostLoading = true
         const response = await axios.get("https://jsonplaceholder.typicode.com/posts?_limit=10")
-        console.log(response)
+        this.posts = response.data
       } catch {
         alert("Error!")
+      } finally {
+        this.isPostLoading = false
       }
     }
   },
-  components: { PostForm, PostList, MyButton }
+  components: { PostForm, PostList, MyButton, MySelect },
+  mounted() {
+    this.fetchPosts()
+  }
 }
 </script>
 
@@ -60,5 +75,11 @@ export default {
 
 .app {
   padding: 20px;
+}
+
+.app_btn {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
 }
 </style>
