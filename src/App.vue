@@ -10,7 +10,7 @@
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost"/>
     </my-dialog>
-    <post-list :posts="posts" @remove="removePost"
+    <post-list :posts="sortedPosts" @remove="removePost"
     v-if="!isPostLoading"/>
     <div v-else>loading...</div>
   </div>
@@ -20,8 +20,6 @@
 import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
 import axios from "axios"
-import MyButton from "./components/UI/MyButton.vue";
-import MySelect from "./components/UI/MySelect.vue";
 export default {
   data() {
     return {
@@ -32,7 +30,6 @@ export default {
       sortOptions: [
         {value: "title", name: "by name"},
         {value: "body", name: "by innertext"},
-        {value: "id", name: "by id"},
       ]
     };
   },
@@ -52,6 +49,7 @@ export default {
         this.isPostLoading = true
         const response = await axios.get("https://jsonplaceholder.typicode.com/posts?_limit=10")
         this.posts = response.data
+        console.log(response.data)
       } catch {
         alert("Error!")
       } finally {
@@ -59,10 +57,18 @@ export default {
       }
     }
   },
-  components: { PostForm, PostList, MyButton, MySelect },
+  components: { PostForm, PostList },
   mounted() {
     this.fetchPosts()
-  }
+  },
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+    }
+  },
+  watch: {
+
+  },
 }
 </script>
 

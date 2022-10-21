@@ -1,7 +1,7 @@
 <template>
   <select v-model="modelValue" @change="changeOption">
     <option disabled value="">choose from list</option>
-    <option v-for="option in options" :key="option.value" value="option.value">{{option.name}}</option>
+    <option v-for="option in options" :key="option.value" :value="option.value">{{option.name}}</option>
   </select>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     changeOption(e) {
       this.$emit("update:modelValue", e.target.value)
     }
-  }
+  },
 }
 </script>
 
