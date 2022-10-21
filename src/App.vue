@@ -4,14 +4,12 @@
     <my-input v-model="searchQuery" placeholder="search" />
     <div class="app_btn">
       <my-button @click="showDialog">Add new post</my-button>
-      <my-select v-model="selectedSort"
-      :options="sortOptions"
-      ></my-select>
+      <my-select v-model="selectedSort" :options="sortOptions"></my-select>
     </div>
     <my-dialog v-model:show="dialogVisible">
-      <post-form @create="createPost"/>
+      <post-form @create="createPost" />
     </my-dialog>
-    <div class="page_wrapper">
+    <!-- <div class="page_wrapper">
       <div
       v-for="pageNumber in totalPages"
       :key="pageNumber"
@@ -21,10 +19,10 @@
         }"
         @click="changePage(pageNumber)"
       >{{pageNumber}}</div>
-    </div>
-    <post-list :posts="sortedAndSearchedPosts" @remove="removePost"
-    v-if="!isPostLoading"/>
+    </div> -->
+    <post-list :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>loading...</div>
+    <div ref="observer"></div>
   </div>
 </template>
 
@@ -37,15 +35,15 @@ export default {
     return {
       posts: [],
       dialogVisible: false,
-      isPostLoading: false,
+      isPostsLoading: false,
       selectedSort: "",
       searchQuery: "",
       page: 1,
       limit: 10,
       totalPages: 0,
       sortOptions: [
-        {value: "title", name: "by name"},
-        {value: "body", name: "by innertext"},
+        { value: "title", name: "by name" },
+        { value: "body", name: "by innertext" },
       ]
     };
   },
@@ -60,12 +58,12 @@ export default {
     showDialog() {
       this.dialogVisible = true
     },
-    changePage(pageNumber) {
-      this.page = pageNumber
-    },
+    // changePage(pageNumber) {
+    //   this.page = pageNumber
+    // },
     async fetchPosts() {
       try {
-        this.isPostLoading = true
+        this.isPostsLoading = true
         const response = await axios.get("https://jsonplaceholder.typicode.com/posts", {
           params: {
             _page: this.page,
@@ -74,17 +72,43 @@ export default {
         })
         this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
         this.posts = response.data
-        console.log(response.data)
       } catch {
         alert("Error!")
       } finally {
-        this.isPostLoading = false
+        this.isPostsLoading = false
+      }
+    },
+    async loadMorePosts() {
+      try {
+        this.page += 1
+        const response = await axios.get("https://jsonplaceholder.typicode.com/posts", {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        })
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+        this.posts = [...this.posts, ...response.data]
+      } catch {
+        alert("Error!")
+      } finally {
       }
     }
   },
   components: { PostForm, PostList },
   mounted() {
     this.fetchPosts()
+    let options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+    const callback = (entries,observer) => {
+      if(entries[0].isIntersecting) {
+        this.loadMorePosts()
+      }
+    }
+    let observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer)
   },
   computed: {
     sortedPosts() {
@@ -95,9 +119,9 @@ export default {
     }
   },
   watch: {
-    page() {
-      this.fetchPosts()
-    }
+    // page() {
+    //   this.fetchPosts()
+    // }
   },
 }
 </script>
@@ -133,5 +157,10 @@ export default {
 
 .current-page {
   background-color: teal;
+}
+
+.observer {
+  height: 30px;
+  background-color: green;
 }
 </style>
