@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>
       App created due Vue 3
     </h1>
@@ -13,5 +13,7 @@ export default {
 </script>
 
 <style scoped>
-
+.wrapper {
+  margin-top: 50px;
+}
 </style>

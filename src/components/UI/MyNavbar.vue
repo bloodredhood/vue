@@ -16,6 +16,8 @@ export default {
 
 <style>
 .navbar {
+  position: fixed;
+  width: 100%;
   height: 50px;
   background-color: lightgray;
   box-shadow: 2px 2px 4px gray;

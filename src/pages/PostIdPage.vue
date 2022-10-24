@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>
       Post page, id = {{$route.params.id}}
     </h1>
@@ -13,5 +13,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .wrapper {
+  margin-top: 50px;
+}
 </style>

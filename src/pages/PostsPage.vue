@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>Posts Page</h1>
-    <my-input v-model="searchQuery" placeholder="search" />
+    <my-input v-focus v-model="searchQuery" placeholder="search" />
     <div class="app_btn">
       <my-button @click="showDialog">Add new post</my-button>
       <my-select v-model="selectedSort" :options="sortOptions"></my-select>
@@ -22,7 +22,7 @@
     </div> -->
     <post-list :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>loading...</div>
-    <div ref="observer"></div>
+    <div v-intersection="loadMorePosts" ></div>
   </div>
 </template>
 
@@ -98,17 +98,7 @@ export default {
   components: { PostForm, PostList },
   mounted() {
     this.fetchPosts()
-    let options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    const callback = (entries,observer) => {
-      if(entries[0].isIntersecting) {
-        this.loadMorePosts()
-      }
-    }
-    let observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
+
   },
   computed: {
     sortedPosts() {
@@ -127,6 +117,9 @@ export default {
 </script>
 
 <style>
+.wrapper {
+  margin-top: 50px;
+}
 
 .app_btn {
   display: flex;

@@ -2,7 +2,7 @@
   <form @submit.prevent>
     <h4>Post creation</h4>
 
-    <my-input v-model="post.title" type="text" placeholder="Name" />
+    <my-input v-focus v-model="post.title" type="text" placeholder="Name" />
     <my-input v-model="post.body" type="text"
       placeholder="Description" />
     <my-button style="align-self: flex-end; margin-top: 15px;" @click="createPost">create post</my-button>
