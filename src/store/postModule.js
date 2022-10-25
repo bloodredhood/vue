@@ -12,6 +12,7 @@ export const postModule = {
     sortOptions: [
       { value: "title", name: "by name" },
       { value: "body", name: "by innertext" },
+      { value: "id?.", name: "by id" },
     ]
   }),
   getters: {

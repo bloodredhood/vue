@@ -9,11 +9,11 @@
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
     </my-dialog>
-    <div class="page_wrapper">
+    <!-- <div class="page_wrapper">
       <div v-for="pageNumber in totalPages" :key="pageNumber" class="page" :class="{
         'current-page': page === pageNumber
       }" @click="changePage(pageNumber)">{{ pageNumber }}</div>
-    </div>
+    </div> -->
     <post-list :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>loading...</div>
     <div v-intersection="loadMorePosts"></div>

@@ -22,7 +22,7 @@
     </div> -->
     <post-list :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>loading...</div>
-    <div v-intersection="loadMorePosts" ></div>
+    <div v-intersection="loadMorePosts"></div>
   </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
       limit: 10,
       totalPages: 0,
       sortOptions: [
+        { value: "id?.", name: "by id" },
         { value: "title", name: "by name" },
         { value: "body", name: "by innertext" },
       ]
